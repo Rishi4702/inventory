@@ -9,8 +9,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 function AppWrapper() {
   return (
     <div>
-      <App />
       <Contact />
+      <App />
     </div>
   );
 }
