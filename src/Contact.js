@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 class Contact extends React.Component {
   constructor(props) {
@@ -9,6 +8,7 @@ class Contact extends React.Component {
       authorized: false,
     };
     this.authorize = this.authorize.bind(this);
+    this.logout =this.logout.bind(this);
   }
 
   authorize(e) {
@@ -56,4 +56,5 @@ class Contact extends React.Component {
   }
 }
 
-ReactDOM.render(<Contact />, document.getElementById("app"));
+export default Contact;
+// ReactDOM.render(<Contact />, document.getElementById("app"));
