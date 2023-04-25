@@ -2,14 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Contact from './Contact.js';
+import Contact from './auth/login';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 function AppWrapper() {
   return (
     <div>
-      <App />
       <Contact />
     </div>
   );
