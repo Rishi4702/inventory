@@ -1,49 +1,83 @@
 import React from "react";
 import "./login.css";
+import axios from "axios";
+
 class Contact extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "s@s.pl",
-      password: "1",
+      email: "",
+      password: "",
       authorized: false,
+      error: "",
     };
     this.authorize = this.authorize.bind(this);
     this.logout = this.logout.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    this.setState({
+      [name]: value,
+    });
   }
 
   authorize(e) {
-    const password = e.target.querySelector('input[type="password"]').value;
-    const auth = password === this.state.password;
-    this.setState({
-      authorized: auth,
-    });
+    e.preventDefault();
+    axios
+      .post("http://localhost:8080/auth/login", {
+        email: this.state.email,
+        password: this.state.password,
+      })
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          authorized: true,
+          error: "",
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({
+          authorized: false,
+          error: "Invalid email or password",
+        });
+      });
   }
 
   logout(e) {
+    e.preventDefault();
     this.setState({
       authorized: false,
+      email: "",
+      password: "",
+      error: "",
     });
-  };
-
+  }
 
   render() {
     const login = (
       <div className="login-page">
         <div className="form">
           <h1>Login</h1>
-          <br></br>
+          <br />
           <h5>See your growth and get support</h5>
-          <br></br>
-          <br></br>
-          <form className="login-form" onSubmit={this.handleSubmit}>
+          <br />
+          <br />
+          <form className="login-form" onSubmit={this.authorize}>
             <div className="login-input-container">
               <label htmlFor="username">Email</label>
               <br />
               <input
                 type="text"
-                name="username"
-                id="username"/>
+                name="email"
+                id="email"
+                value={this.state.email}
+                onChange={this.handleInputChange}
+              />
             </div>
             <div className="login-input-container">
               <label htmlFor="password">Password</label>
@@ -51,18 +85,22 @@ class Contact extends React.Component {
               <input
                 type="password"
                 name="password"
-                id="password"/>
+                id="password"
+                value={this.state.password}
+                onChange={this.handleInputChange}
+              />
             </div>
-            <br></br>
+            {this.state.error && (
+              <div className="error">{this.state.error}</div>
+            )}
+            <br />
             <button type="submit" className="login-button">
               Login
             </button>
           </form>
         </div>
       </div>
-
     );
-
 
     const contactInfo = (
       <div>
@@ -71,20 +109,17 @@ class Contact extends React.Component {
           <li>555.555.5555</li>
         </ul>
         <form action="#" onSubmit={this.logout}>
-          <input type="submit" />
+          <input type="submit" value="Logout" />
         </form>
       </div>
     );
 
     return (
       <div id="authorization">
-        {/* <h1>{this.state.authorized ? "Contact" : "Enter the Password"}</h1> */}
         {this.state.authorized ? contactInfo : login}
       </div>
     );
-
   }
 }
 
 export default Contact;
-// ReactDOM.render(<Contact />, document.getElementById("app"));
