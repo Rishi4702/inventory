@@ -1,52 +1,24 @@
-import './App.css';
-
 import React from "react";
-const owl = {
-  title: 'Excellent Owl',
-  src: 'https://content.codecademy.com/courses/React/react_photo-owl.jpg'
-};
+/*import { BrowserRouter as Router, Route, Switch } from "react-router-dom";*/
+import { Switch, Route } from 'react-router-dom';
 
-class Rishav extends React.Component {
+import Register from "./components/Register";
+import Contact from "./components/Contact";
+i
+
+class App extends React.Component {
   render() {
     return (
-      <div>
-        <blockquote>
-          <p>What is important now is to recover our senses.</p>
-          <cite>
-            <a
-              target="_blank"
-              href="https://en.wikipedia.org/wiki/Susan_Sontag"
-            >
-              Susan Sontag
-            </a>
-          </cite>
-        </blockquote>
-      </div>
+      <Router>
+        <div className="App">
+          <Switch>
+            <Route exact path="/" component={Register} />
+            <Route exact path="/contact" component={Contact} />
+          </Switch>
+        </div>
+      </Router>
     );
   }
-}
-
-class Owl extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1>{owl.title}</h1>
-        <img 
-          src={owl.src}
-          alt={owl.title}
-        />
-      </div>
-    );
-  }
-}
-
-function App() {
-  return (
-    <div>
-      <Rishav/>
-        <Owl/>
-    </div>
-  );
 }
 
 export default App;
