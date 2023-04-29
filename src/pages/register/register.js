@@ -1,6 +1,7 @@
 import React from "react";
 import "./register.css";
 import axios from "axios";
+import Contact from "../auth/login";
 
 class Register extends React.Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class Register extends React.Component {
       name: "",
       surname: "",
       error: "",
-      response: ""
+      response: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -103,12 +104,6 @@ class Register extends React.Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            {this.state.error && (
-              <div className="error">{this.state.error}</div>
-            )}
-            {this.state.response && (
-              <div className="response">{this.state.response}</div>
-            )}
             <br />
             <button type="submit" className="login-button">
               Register
@@ -118,9 +113,16 @@ class Register extends React.Component {
       </div>
     );
 
+    const successMessage = (
+      <div className="success-message">
+        User created successfully!
+      </div>
+    );
+
     return (
       <div id="authorization">
-        {login}
+      {this.state.response && successMessage}
+      {login}
       </div>
     );
   }
