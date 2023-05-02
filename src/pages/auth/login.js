@@ -1,8 +1,9 @@
 import React from "react";
 import "./login.css";
 import axios from "axios";
-
-class Contact extends React.Component {
+import { withRouter} from "react-router-dom";
+import Navbar from "../panel/navbar";
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +13,6 @@ class Contact extends React.Component {
       error: "",
     };
     this.authorize = this.authorize.bind(this);
-    this.logout = this.logout.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -38,6 +38,14 @@ class Contact extends React.Component {
           authorized: true,
           error: "",
         });
+
+        // save the access token and user information to localStorage
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("name", response.data.name);
+        localStorage.setItem("surname", response.data.surname);
+
+        // redirect to the Navbar component
+        this.props.history.push("/nav", { from: 'login' });
       })
       .catch((error) => {
         console.log(error);
@@ -48,18 +56,11 @@ class Contact extends React.Component {
       });
   }
 
-  logout(e) {
-    e.preventDefault();
-    this.setState({
-      authorized: false,
-      email: "",
-      password: "",
-      error: "",
-    });
-  }
 
   render() {
-    const login = (
+    const { authorized } = this.state;
+    const { location } = this.props;
+      const login = (
       <div className="login-page">
         <div className="form">
           <h1>Login</h1>
@@ -101,25 +102,18 @@ class Contact extends React.Component {
         </div>
       </div>
     );
-
-    const contactInfo = (
-      <div>
-        <ul>
-          <li>client@example.com</li>
-          <li>555.555.5555</li>
-        </ul>
-        <form action="#" onSubmit={this.logout}>
-          <input type="submit" value="Logout" />
-        </form>
-      </div>
-    );
-
+  
     return (
       <div id="authorization">
-        {this.state.authorized ? contactInfo : login}
+        {location.pathname === "/login" && (
+          <div className="login-page">
+            {login}            
+          </div>
+        )}
       </div>
     );
   }
+  
 }
 
-export default Contact;
+export default withRouter(Login);
