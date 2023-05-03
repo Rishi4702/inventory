@@ -104,7 +104,9 @@ class Register extends React.Component {
                 onChange={this.handleInputChange}
               />
             </div>
+            <a href="/login" >Already a user?</a>
             <br />
+            <br/>
             <button type="submit" className="login-button">
               Register
             </button>

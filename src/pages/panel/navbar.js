@@ -1,8 +1,10 @@
 import { Component } from 'react';
+import React from 'react';
 import { FaSignOutAlt,FaBars, FaChartLine, FaShoppingCart, FaBoxOpen, FaUsers, FaListAlt } from 'react-icons/fa';
 import Avatar from 'react-avatar';
 import "./navbar.css";
-import { withRouter } from "react-router-dom";
+import {useNavigate,withRouter} from 'react-router-dom'; 
+
 
 
 class Navbar extends Component {
@@ -26,9 +28,11 @@ class Navbar extends Component {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('name');
     localStorage.removeItem('surname');
-  
+    window.location.href='/login';
+   
     // redirect user to Login page
-    this.props.history.push('/login');
+    // this.props.history.push('/login');
+    
   };
   
   render() {
@@ -67,4 +71,4 @@ class Navbar extends Component {
   }
 }
 
-export default withRouter(Navbar);
+export default Navbar;

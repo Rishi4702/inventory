@@ -1,8 +1,6 @@
 import React from "react";
 import "./login.css";
 import axios from "axios";
-import { withRouter} from "react-router-dom";
-import Navbar from "../panel/navbar";
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -43,9 +41,7 @@ class Login extends React.Component {
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("name", response.data.name);
         localStorage.setItem("surname", response.data.surname);
-
-        // redirect to the Navbar component
-        this.props.history.push("/nav", { from: 'login' });
+        window.location.href ="/nav"
       })
       .catch((error) => {
         console.log(error);
@@ -94,6 +90,8 @@ class Login extends React.Component {
             {this.state.error && (
               <div className="error">{this.state.error}</div>
             )}
+            <a href="/register">Not registered yet!</a>
+            <br />
             <br />
             <button type="submit" className="login-button">
               Login
@@ -105,7 +103,7 @@ class Login extends React.Component {
   
     return (
       <div id="authorization">
-        {location.pathname === "/login" && (
+        {(
           <div className="login-page">
             {login}            
           </div>
@@ -116,4 +114,4 @@ class Login extends React.Component {
   
 }
 
-export default withRouter(Login);
+export default Login;
