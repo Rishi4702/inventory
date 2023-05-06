@@ -1,9 +1,12 @@
 import { Component } from 'react';
 import React from 'react';
-import { FaSignOutAlt,FaBars, FaChartLine, FaShoppingCart, FaBoxOpen, FaUsers, FaListAlt } from 'react-icons/fa';
+import { FaSignOutAlt,FaBars, FaChartLine, FaShoppingCart, FaBoxOpen, FaListAlt } from 'react-icons/fa';
+import {BsFillCartPlusFill} from 'react-icons/bs';
+import{HiOutlineUserGroup} from 'react-icons/hi'
 import Avatar from 'react-avatar';
 import "./navbar.css";
-import {useNavigate,withRouter} from 'react-router-dom'; 
+import  UserList from "../users/userList";
+import ProductList from "../../pages/product/product";
 
 
 
@@ -13,9 +16,27 @@ class Navbar extends Component {
     // const { history } = props;
     this.state = {
       isPanelOpen: false,
+      showUserList: false,
+      showProductList: false
     };
     this.handlePanelToggle = this.handlePanelToggle.bind(this);
 
+  }
+
+  handleUserListToggle = () => {
+    this.setState((prevState) => ({
+      showProductList: false,
+      showUserList: !prevState.showUserList,
+      isPanelOpen: !prevState.isPanelOpen
+    }));
+  }
+
+  handleProuductListToggle = () => {
+    this.setState((prevState) => ({
+      showUserList: false,
+      showProductList: !prevState.showProductList,
+      isPanelOpen: !prevState.isPanelOpen
+    }));
   }
 
   handlePanelToggle() {
@@ -28,6 +49,7 @@ class Navbar extends Component {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('name');
     localStorage.removeItem('surname');
+    localStorage.removeItem('email');
     window.location.href='/login';
    
     // redirect user to Login page
@@ -36,11 +58,15 @@ class Navbar extends Component {
   };
   
   render() {
-    const { isPanelOpen } = this.state;
+    const { isPanelOpen, showUserList,showProductList  } = this.state;
     const name = localStorage.getItem('name');
     const surname = localStorage.getItem('surname');
-
+    if (!localStorage.getItem('accessToken')) {
+      window.location.href='/login';
+      return null;
+    }
     return (
+    <div>
       <div className="navbar">
         <div className="navbar-left">
           <button className="navbar-btn" onClick={this.handlePanelToggle}>
@@ -55,20 +81,26 @@ class Navbar extends Component {
             <a href="#" onClick={this.handleLogout}><FaSignOutAlt />Logout</a>
           </div>
         </div>
+        </div>
         {isPanelOpen && (
           <div className="navbar-panel">
             <ul>
-              <li><FaChartLine /><a href="#">Dashboard</a></li>
-              <li><FaBoxOpen /><a href="#">In Stock</a></li>
-              <li><FaShoppingCart /><a href="#">Products</a></li>
-              <li><FaListAlt /><a href="#">Sales</a></li>
-              <li><FaUsers /><a href="#">Orders</a></li>
+              <li><FaChartLine style={{color: 'blue'}} /><a href="#">Dashboard</a></li>
+              <li><FaBoxOpen style={{color: 'blue'}} /><a href="#">In Stock</a></li>
+              <li><FaShoppingCart style={{color: 'blue'}}/><a href="#"  onClick={this.handleProuductListToggle}>Products</a></li>
+              <li><FaListAlt style={{color: 'blue'}}/><a href="#">Sales</a></li>
+              <li><BsFillCartPlusFill style={{color: 'blue'}}/><a href="#">Orders</a></li>
+             { localStorage.getItem('roles')==='ROLE_ADMIN'&&<li><HiOutlineUserGroup style={{color: 'blue'}}/><a href="#"  onClick={this.handleUserListToggle}>Users</a></li>}
             </ul>
           </div>
         )}
-      </div>
+          {showUserList &&  <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '500px', width: '800px' }}><UserList /> </div>}
+          {showProductList &&  <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '500px', width: '800px' }}><ProductList /> </div>}
+ 
+    </div>
     );
   }
 }
+
 
 export default Navbar;

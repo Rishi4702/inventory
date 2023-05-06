@@ -41,6 +41,8 @@ class Login extends React.Component {
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("name", response.data.name);
         localStorage.setItem("surname", response.data.surname);
+        localStorage.setItem("email", response.data.email);
+        localStorage.setItem("roles",response.data.roles);
         window.location.href ="/nav"
       })
       .catch((error) => {
