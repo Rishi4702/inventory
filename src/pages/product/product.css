@@ -1,12 +1,13 @@
 .product-list-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   margin-top: 60px;
+  height: fit-content;
+  width: fit-content;
 }
 
 .product-card {
-  width: 300px;
+  width: 300px; /* width of one-third of the container minus margin */
   margin: 10px;
   border: 1px solid #ccc;
   background-color: #d5e5f5;
@@ -20,12 +21,11 @@
   transform: translateY(-5px);
 }
 
-
 .product-card .product-details {
   padding: 10px;
 }
 
-.product-card .product-details h2 {
+.product-card .product-details h1 {
   margin: 0;
   font-size: 1.2rem;
   font-weight: 500;

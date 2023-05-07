@@ -10,6 +10,10 @@ const UserCard = ({ user }) => {
   const [showCompanyForm, setShowCompanyForm] = useState(false);
   const [companyOptions, setCompanyOptions] = useState([]);
 
+  const [selectedStorehouse, setSelectedStorehouse] = useState(managedStorehouses ? managedStorehouses.id : '');
+  const [showStorehouseForm, setShowStorehouseForm] = useState(false);
+  const [storehouseOptions, setStorehouseOptions] = useState([]);
+
   useEffect(() => {
     axios.get('http://localhost:8080/company/all')
       .then(response => {
@@ -20,8 +24,25 @@ const UserCard = ({ user }) => {
       });
   }, []);
 
+  useEffect(() => {
+    axios.get('http://localhost:8080/storehouse/all')
+      .then(response => {
+        setStorehouseOptions(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+
   const handleManageStorehouses = () => {
     // Implement logic for managing storehouses
+    if (!managedStorehouses.name) {
+      console.log("button working")
+      setShowStorehouseForm(true);
+    } else {
+      // Implement logic for managing storehouses
+    }
   };
 
   const handleManageCompany = () => {
@@ -35,9 +56,9 @@ const UserCard = ({ user }) => {
   const handleCompanySubmit = (event) => {
     event.preventDefault();
     axios.post('http://localhost:8080/company/employee', {
-        userId: id,
-        companyId: selectedCompany
-      })
+      userId: id,
+      companyId: selectedCompany
+    })
       .then(response => {
         console.log('Company assigned successfully');
         // Implement any necessary state updates or other actions
@@ -49,6 +70,25 @@ const UserCard = ({ user }) => {
     setShowCompanyForm(false);
   };
 
+  const handleStorehouseSubmit = (event) => {
+    event.preventDefault();
+    axios.post('http://localhost:8080/storehouse/user', {
+      userId: id,
+      storehouseId: selectedStorehouse
+    })
+      .then(response => {
+        console.log('Storehouse assigned successfully');
+        // Implement any necessary state updates or other actions
+      })
+      .catch(error => {
+        console.log('Error assigning storehouse:', error);
+        // Implement any necessary error handling
+      });
+    setShowStorehouseForm(false);
+  };
+
+
+
   const getRandomColor = () => {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   };
@@ -56,6 +96,7 @@ const UserCard = ({ user }) => {
   return (
     <div className="card">
       <div className="card-body">
+      <p className="card-text">ID: {id}</p>
         <div className="avatar-name">
           <Avatar name={name + ' ' + surname} size="40" round={true} color={getRandomColor()} />
           <div className="name-surname">
@@ -63,9 +104,16 @@ const UserCard = ({ user }) => {
             {verified && <GoVerified className="verified-badge" />}
           </div>
         </div>
-        <h4>{email}</h4>
-        <h5>Current company: {company == null ? 'Not assigned' : company.name}</h5>
-        <p className="card-text">ID: {id}</p>
+        <h2>{email}</h2>
+        <h3>Current company: {company == null ? 'Not assigned' : company.name}</h3>
+       <div className="storehouses-container">
+        <h3>Current Storehouses:</h3>
+        <ul className="storehouses-list">
+          {managedStorehouses == null ? 'Not assigned' : managedStorehouses.map(storehouse => (
+            <li key={storehouse.id}><h3>{storehouse.name}</h3></li>
+          ))}
+        </ul>
+        </div>
         <button className="btn btn-primary" onClick={handleManageStorehouses}>Manage Storehouses</button>
         <button className="btn btn-primary" onClick={handleManageCompany}>Manage Company</button>
         {showCompanyForm &&
@@ -87,6 +135,26 @@ const UserCard = ({ user }) => {
             <button type="submit" className="btn btn-primary">Submit</button>
           </form>
         }
+        {showStorehouseForm &&
+          <form onSubmit={handleStorehouseSubmit}>
+            <div className="form-group">
+              <label htmlFor="storehouseSelect">Select Storehouse:</label>
+              <select
+                className="form-control"
+                id="storehouseSelect"
+                value={selectedStorehouse}
+                onChange={(e) => setSelectedStorehouse(e.target.value)}
+              >
+                <option value="">Choose...</option>
+                {storehouseOptions.map(option => (
+                  <option key={option.id} value={option.id}>{option.name}</option>
+                ))}
+              </select>
+            </div>
+            <button type="submit" className="btn btn-primary">Submit</button>
+          </form>
+        }
+
       </div>
     </div>
   );

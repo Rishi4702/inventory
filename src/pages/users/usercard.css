@@ -123,3 +123,17 @@
     background-color: #0069d9;
   }
   
+  .storehouses-container {
+    position: relative; /* Make the container relative to its position */
+  }
+  
+  .storehouses-list {
+    display: none; /* Hide the list by default */
+
+  }
+  
+  .storehouses-container:hover .storehouses-list {
+    display: block; /* Show the list when the container is hovered */
+  }
+
+  

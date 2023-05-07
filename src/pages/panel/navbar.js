@@ -5,9 +5,9 @@ import {BsFillCartPlusFill} from 'react-icons/bs';
 import{HiOutlineUserGroup} from 'react-icons/hi'
 import Avatar from 'react-avatar';
 import "./navbar.css";
-import  UserList from "../users/userList";
+import UserList from "../users/userList";
 import ProductList from "../../pages/product/product";
-
+import WarehouseSelection from "../../pages/storehouse/storehouse";
 
 
 class Navbar extends Component {
@@ -17,7 +17,8 @@ class Navbar extends Component {
     this.state = {
       isPanelOpen: false,
       showUserList: false,
-      showProductList: false
+      showProductList: false,
+      showWarehouseList: false
     };
     this.handlePanelToggle = this.handlePanelToggle.bind(this);
 
@@ -25,6 +26,7 @@ class Navbar extends Component {
 
   handleUserListToggle = () => {
     this.setState((prevState) => ({
+      showWarehouseList:false,
       showProductList: false,
       showUserList: !prevState.showUserList,
       isPanelOpen: !prevState.isPanelOpen
@@ -33,12 +35,21 @@ class Navbar extends Component {
 
   handleProuductListToggle = () => {
     this.setState((prevState) => ({
+      showWarehouseList:false,
       showUserList: false,
       showProductList: !prevState.showProductList,
       isPanelOpen: !prevState.isPanelOpen
     }));
   }
 
+  handleWarehouseToggle = () => {
+    this.setState((prevState) => ({
+      showProductList:false,
+      showUserList: false,
+      showWarehouseList: !prevState.showWarehouseList,
+      isPanelOpen: !prevState.isPanelOpen
+    }));
+  }
   handlePanelToggle() {
     this.setState((prevState) => ({
       isPanelOpen: !prevState.isPanelOpen,
@@ -50,6 +61,7 @@ class Navbar extends Component {
     localStorage.removeItem('name');
     localStorage.removeItem('surname');
     localStorage.removeItem('email');
+    localStorage.removeItem('id');
     window.location.href='/login';
    
     // redirect user to Login page
@@ -58,7 +70,7 @@ class Navbar extends Component {
   };
   
   render() {
-    const { isPanelOpen, showUserList,showProductList  } = this.state;
+    const { isPanelOpen, showUserList,showProductList ,showWarehouseList } = this.state;
     const name = localStorage.getItem('name');
     const surname = localStorage.getItem('surname');
     if (!localStorage.getItem('accessToken')) {
@@ -86,7 +98,7 @@ class Navbar extends Component {
           <div className="navbar-panel">
             <ul>
               <li><FaChartLine style={{color: 'blue'}} /><a href="#">Dashboard</a></li>
-              <li><FaBoxOpen style={{color: 'blue'}} /><a href="#">In Stock</a></li>
+              <li><FaBoxOpen style={{color: 'blue'}} /><a href="#"onClick={this.handleWarehouseToggle}>In Stock</a></li>
               <li><FaShoppingCart style={{color: 'blue'}}/><a href="#"  onClick={this.handleProuductListToggle}>Products</a></li>
               <li><FaListAlt style={{color: 'blue'}}/><a href="#">Sales</a></li>
               <li><BsFillCartPlusFill style={{color: 'blue'}}/><a href="#">Orders</a></li>
@@ -94,9 +106,9 @@ class Navbar extends Component {
             </ul>
           </div>
         )}
-          {showUserList &&  <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '500px', width: '800px' }}><UserList /> </div>}
-          {showProductList &&  <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '500px', width: '800px' }}><ProductList /> </div>}
- 
+          {showUserList &&  <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '500px', width: 'fit-content' }}><UserList /> </div>}
+          {showProductList &&  <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '500px', width: 'fit-content' }}><ProductList /> </div>}
+          {showWarehouseList &&  <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '500px', width: 'fit-content' }}><WarehouseSelection /> </div>}
     </div>
     );
   }
