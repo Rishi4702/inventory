@@ -31,7 +31,7 @@ class Register extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     axios
-      .post("http://localhost:8080/auth/register/admin", {
+      .post("http://10.8.0.6:8080/auth/register/admin", {
         email: this.state.email,
         password: this.state.password,
         name: this.state.name,

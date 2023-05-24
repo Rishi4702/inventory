@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InventoryDisplay from './inventoryDisplay';
 import AddProduct from './AddProduct';
 
@@ -6,18 +6,20 @@ function WarehouseSelection() {
 
   const [warehouses, setWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+  const childRef = useRef(null);
 
   useEffect(() => {
     updateWarehouse();
   }, []);
 
-  const updateSelectedWarehouse = () => {
-    updateWarehouse();
-  }
-
   const handleWarehouseChange = (event) => {
     const warehouseId = parseInt(event.target.value);
     setSelectedWarehouse(warehouseId);
+  };
+
+  
+  const middlemanFunc = () => {
+    childRef.current.TriggeredFunc();
   };
 
   const updateWarehouse = () => {
@@ -25,15 +27,18 @@ function WarehouseSelection() {
     const userId = localStorage.getItem("id");
     const token = localStorage.getItem("accessToken");
 
+    console.log('fetch')
+
     // Make request to API with bearer token and user ID
-    fetch(`http://localhost:8080/users/${userId}`, {
+    fetch(`http://10.8.0.6:8080/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response.json())
       .then((data) => {
-        setWarehouses(data.managedStorehouses);
+        setWarehouses(data.company.storehouses);
+        console.log(data);
       })
       .catch((error) => {
         console.error(error);
@@ -63,9 +68,9 @@ function WarehouseSelection() {
         ) : (
           <h2>{localStorage.getItem('name')} is not assigned to any warehouse.</h2>
         )}
-        <InventoryDisplay selectedWarehouse={selectedWarehouse} key={selectedWarehouse} />
+        <InventoryDisplay selectedWarehouse={selectedWarehouse} key={selectedWarehouse} ref={childRef} />
       </div>
-      <AddProduct selectedWarehouse={selectedWarehouse} key={selectedWarehouse} notifyParent={updateSelectedWarehouse} />
+      <AddProduct selectedWarehouse={selectedWarehouse} key={selectedWarehouse} notifyParent={middlemanFunc} />
     </div>
   );
 }

@@ -26,7 +26,7 @@ class Login extends React.Component {
   authorize(e) {
     e.preventDefault();
     axios
-      .post("http://localhost:8080/auth/login", {
+      .post("http://10.8.0.6:8080/auth/login", {
         email: this.state.email,
         password: this.state.password,
       })
@@ -42,9 +42,9 @@ class Login extends React.Component {
         localStorage.setItem("name", response.data.name);
         localStorage.setItem("surname", response.data.surname);
         localStorage.setItem("email", response.data.email);
-        localStorage.setItem("roles",response.data.roles);
+        localStorage.setItem("roles", response.data.roles);
         localStorage.setItem("id", response.data.id);
-        window.location.href ="/nav"
+        window.location.href = "/nav"
       })
       .catch((error) => {
         console.log(error);
@@ -59,7 +59,7 @@ class Login extends React.Component {
   render() {
     const { authorized } = this.state;
     const { location } = this.props;
-      const login = (
+    const login = (
       <div className="login-page">
         <div className="form">
           <h1>Login</h1>
@@ -103,18 +103,18 @@ class Login extends React.Component {
         </div>
       </div>
     );
-  
+
     return (
       <div id="authorization">
         {(
           <div className="login-page">
-            {login}            
+            {login}
           </div>
         )}
       </div>
     );
   }
-  
+
 }
 
 export default Login;

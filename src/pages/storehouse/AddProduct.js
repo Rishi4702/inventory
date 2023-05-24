@@ -10,7 +10,7 @@ function AddProduct(props) {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8080/product/all")
+			.get("http://10.8.0.6:8080/product/all")
 			.then((response) => {
 				setProducts(response.data);
 			})
@@ -26,18 +26,18 @@ function AddProduct(props) {
 
 	const addProductToWarehouse = (product) => {
 		console.log(`Adding product ID[${product.id}] to warehouse ID[${props.selectedWarehouse}] with quantity [${formQuantity}]`);
-		axios.post("http://localhost:8080/storehouse/product/add",{
+		axios.post("http://10.8.0.6:8080/storehouse/product/add",{
 			storehouseId: props.selectedWarehouse,
 			productId: product.id,
 			quantity: formQuantity
 		})
 		.then((response) => {
-		  console.log(response.data)
+		  console.log(response.data);
+			props.notifyParent();
 		})
 		.catch((error) => {
 		  console.log(error);
 		});
-		props.notifyParent();
 	}
 
 	const onAddProdQuantityChange = (event) => {

@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useReducer, forwardRef, useImperativeHandle } from "react";
+import axios from "axios";
 import './inventory.css';
 
-const InventoryDisplay = forwardRef((props, ref) => {
+const OrderInventoryDisplay = forwardRef((props, ref) => {
 
   const [inventory, setInventory] = useState([]);
+  const [orderAmount, setOrderAmount] = useState(0);
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
@@ -11,15 +13,7 @@ const InventoryDisplay = forwardRef((props, ref) => {
     if (!props.selectedWarehouse) {
       return;
     }
-
-    fetch(`http://10.8.0.6:8080/storehouse/inv/${props.selectedWarehouse}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setInventory(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    updateInventory();
   }, [props.selectedWarehouse]);
 
   const updateInventory = () => {
@@ -33,11 +27,50 @@ const InventoryDisplay = forwardRef((props, ref) => {
       });
   }
 
+  const submitOrder = async (productId) => {
+    // Get managinig storehouse id
+    const token = localStorage.getItem('accessToken');
+    const storeHouseData = await axios.get('http://10.8.0.6:8080/users/storehouses', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    const wareHouseId = storeHouseData.data[0].id;
+    const payload = {
+      formStorehouseId: props.selectedWarehouse,
+      toStorehouseId: wareHouseId,
+      items: [
+        {
+          productId: productId,
+          quantity: orderAmount
+        }
+      ]
+    };
+
+    console.log(payload)
+
+    axios.post('http://10.8.0.6:8080/order', payload, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+  }
+
   useImperativeHandle(ref, () => ({
     TriggeredFunc() {
       updateInventory();
     }
-  }));;
+  }));
 
   // const forceUpdateInv = () => {
   //   console.log('forceUpdateInv inside inventoryDisplay')
@@ -56,11 +89,13 @@ const InventoryDisplay = forwardRef((props, ref) => {
           <p style={{ height: "50px", overflow: "hidden", transition: "height 0.5s" }}>{item.product.description}</p>
           <p>Price: {item.product.price} USD</p>
           <p>Quantity: {item.quantity}</p>
+          <input type="number" onChange={(event) => setOrderAmount(event.target.value)} />
           <p>{item.message}</p>
+          <button type="button" onClick={() => submitOrder(item.product.id)}>Order</button>
         </div>
       ))}
     </div>
   );
 });
 
-export default InventoryDisplay;
+export default OrderInventoryDisplay;

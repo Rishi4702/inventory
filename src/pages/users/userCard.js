@@ -10,29 +10,54 @@ const UserCard = ({ user }) => {
   const [showCompanyForm, setShowCompanyForm] = useState(false);
   const [companyOptions, setCompanyOptions] = useState([]);
 
-  const [selectedStorehouse, setSelectedStorehouse] = useState(managedStorehouses ? managedStorehouses.id : '');
+  const [selectedStorehouse, setSelectedStorehouse] = useState(company.storehouses ? company.storehouses.id : '');
   const [showStorehouseForm, setShowStorehouseForm] = useState(false);
   const [storehouseOptions, setStorehouseOptions] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/company/all')
+    // Get the id from localStorage
+    const id = localStorage.getItem('id');
+
+    // Get the JWT token from localStorage
+    const token = localStorage.getItem('accessToken');
+
+    // Make the API request with the updated endpoint and the JWT token
+    axios.get(`http://10.8.0.6:8080/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
       .then(response => {
-        setCompanyOptions(response.data);
+        console.log(response);
+        var tempArr = [];
+        tempArr.push(response.data.company);
+        setCompanyOptions(tempArr);
+        setStorehouseOptions(response.data.company.storehouses);
       })
       .catch(error => {
         console.log(error);
       });
   }, []);
 
-  useEffect(() => {
-    axios.get('http://localhost:8080/storehouse/all')
-      .then(response => {
-        setStorehouseOptions(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios.get('http://10.8.0.6:8080/storehouse/all')
+  //     .then(response => {
+  //       setStorehouseOptions(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
+  // const updateStorehouseDisplay = () => {
+  //   axios.get('http://10.8.0.6:8080/storehouse/all')
+  //     .then(response => {
+  //       setStorehouseOptions(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // }
 
 
   const handleManageStorehouses = () => {
@@ -55,24 +80,32 @@ const UserCard = ({ user }) => {
 
   const handleCompanySubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:8080/company/employee', {
+    const token = localStorage.getItem('accessToken');
+
+    axios.post('http://10.8.0.6:8080/company/employee', {
       userId: id,
       companyId: selectedCompany
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
       .then(response => {
         console.log('Company assigned successfully');
+        // updateStorehouseDisplay();
         // Implement any necessary state updates or other actions
       })
       .catch(error => {
         console.log('Error assigning company:', error);
         // Implement any necessary error handling
       });
+
     setShowCompanyForm(false);
   };
 
   const handleStorehouseSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:8080/storehouse/user', {
+    axios.post('http://10.8.0.6:8080/storehouse/user', {
       userId: id,
       storehouseId: selectedStorehouse
     })
@@ -96,7 +129,7 @@ const UserCard = ({ user }) => {
   return (
     <div className="card">
       <div className="card-body">
-      <p className="card-text">ID: {id}</p>
+        <p className="card-text">ID: {id}</p>
         <div className="avatar-name">
           <Avatar name={name + ' ' + surname} size="40" round={true} color={getRandomColor()} />
           <div className="name-surname">
@@ -106,13 +139,13 @@ const UserCard = ({ user }) => {
         </div>
         <h2>{email}</h2>
         <h3>Current company: {company == null ? 'Not assigned' : company.name}</h3>
-       <div className="storehouses-container">
-        <h3>Current Storehouses:</h3>
-        <ul className="storehouses-list">
-          {managedStorehouses == null ? 'Not assigned' : managedStorehouses.map(storehouse => (
-            <li key={storehouse.id}><h3>{storehouse.name}</h3></li>
-          ))}
-        </ul>
+        <div className="storehouses-container">
+          <h3>Current Storehouses:</h3>
+          <ul className="storehouses-list">
+            {company.storehouses == null ? 'Not assigned' : company.storehouses.map(storehouse => (
+              <li key={storehouse.id}><h3>{storehouse.name}</h3></li>
+            ))}
+          </ul>
         </div>
         <button className="btn btn-primary" onClick={handleManageStorehouses}>Manage Storehouses</button>
         <button className="btn btn-primary" onClick={handleManageCompany}>Manage Company</button>

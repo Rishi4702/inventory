@@ -4,12 +4,11 @@ import UserCard from '../users/userCard.js';
 import './usercard.css';
 const UserList = () => {
   const [users, setUsers] = useState([]);
-  const [showSelf, setShowSelf] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    axios.get('http://localhost:8080/users/all', {
+    axios.get('http://10.8.0.6:8080/users/all', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -23,10 +22,6 @@ const UserList = () => {
   }, []);
 
   // const currentUser = users.find(user => user.email === localStorage.getItem('email'));
-
-  const handleToggleShowSelf = () => {
-    setShowSelf(!showSelf);
-  };
 
   const filteredUsers = users.filter(user => {
     const fullName = user.name + ' ' + user.surname;
