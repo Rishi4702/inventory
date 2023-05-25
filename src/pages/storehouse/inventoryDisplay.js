@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useReducer, forwardRef, useImperativeHandle } from "react";
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import './inventory.css';
 
 const InventoryDisplay = forwardRef((props, ref) => {
 
   const [inventory, setInventory] = useState([]);
-  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
 
@@ -38,11 +37,6 @@ const InventoryDisplay = forwardRef((props, ref) => {
       updateInventory();
     }
   }));;
-
-  // const forceUpdateInv = () => {
-  //   console.log('forceUpdateInv inside inventoryDisplay')
-  //   forceUpdate();
-  // }
 
   if (inventory.length === 0) {
     return <p>No products found in inventory.</p>;

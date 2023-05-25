@@ -9,6 +9,7 @@ import UserList from "../users/userList";
 import ProductList from "../../pages/product/product";
 import WarehouseSelection from "../../pages/storehouse/storehouse";
 import Order from "./../order/order";
+import Dash from "./../dashboard/dash";
 
 class Navbar extends Component {
   constructor(props) {
@@ -36,7 +37,9 @@ class Navbar extends Component {
       case 'stock':
         return <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '500px', width: 'fit-content' }}><WarehouseSelection /> </div>;
       case 'orders':
-        return <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '500px', width: 'fit-content' }}><Order /> </div>;
+        return <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '800px', width: 'fit-content' }}><Order /> </div>;
+        case 'dash':
+          return <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '220px', marginTop: '20px', height: '800px', width: 'fit-content' }}><Dash /> </div>;
       default:
         return null;
     }
@@ -78,21 +81,21 @@ class Navbar extends Component {
             <Avatar name={name + ' ' + surname} size="40" round={true} />
             <span className="navbar-username">{name + ' ' + surname}</span>
             <div className="navbar-dropdown">
-              <a href="#">Edit Profile</a>
-              <a href="#" onClick={this.handleLogout}><FaSignOutAlt />Logout</a>
+              <div className="div-link">Edit Profile</div>
+              <div className="div-link" onClick={this.handleLogout}><FaSignOutAlt />Logout</div>
             </div>
           </div>
         </div>
         {this.state.isPanelOpen && (
           <div className="navbar-panel">
             <ul>
-              <li><FaChartLine style={{ color: 'blue' }} /><a href="#">Dashboard</a></li>
-              <li><FaBoxOpen style={{ color: 'blue' }} /><a href="#" onClick={() => this.togglePage('stock')}>In Stock</a></li>
-              <li><FaShoppingCart style={{ color: 'blue' }} /><a href="#" onClick={() => this.togglePage('products')}>Products</a></li>
-              <li><FaListAlt style={{ color: 'blue' }} /><a href="#">Sales</a></li>
-              <li><BsFillCartPlusFill style={{ color: 'blue' }} /><a href="#" onClick={() => this.togglePage('orders')}>Orders</a></li>
+              <li><FaChartLine style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('dash')}>Dashboard</div></li>
+              <li><FaBoxOpen style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('stock')}>In Stock</div></li>
+              <li><FaShoppingCart style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('products')}>Products</div></li>
+              <li><FaListAlt style={{ color: 'blue' }} /><div className="div-link">Sales</div></li>
+              <li><BsFillCartPlusFill style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('orders')}>Orders</div></li>
               {localStorage.getItem('roles') === 'ROLE_ADMIN' &&
-                <li><HiOutlineUserGroup style={{ color: 'blue' }} /><a href="#" onClick={() => this.togglePage('users')}>Users</a></li>
+                <li><HiOutlineUserGroup style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('users')}>Users</div></li>
               }
             </ul>
           </div>

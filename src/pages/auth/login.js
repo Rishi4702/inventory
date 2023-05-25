@@ -57,8 +57,6 @@ class Login extends React.Component {
 
 
   render() {
-    const { authorized } = this.state;
-    const { location } = this.props;
     const login = (
       <div className="login-page">
         <div className="form">

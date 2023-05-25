@@ -4,14 +4,27 @@ import "./orderList.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function OrderList(props) {
+function OrderList() {
 
 	const ORDER_STATUS = ["AWAIT", "ACCEPTED", "SHIPPED", "DELIVERED", "CANCELED", "REJECTED"];
 
 	const [products, setProducts] = useState([]);
+	const [searchedProducts, setSearchedProducts] = useState([]);
 	const [searchTerm, setSearchTerm] = useState("");
+	const [checkboxSearch, setCheckboxSearch] = useState(false);
 
 	useEffect(() => {
+		getOrders();
+		// const updateInterval = setInterval(() => {
+		// 	console.log('Updated orders');
+		// 	getOrders();
+		// }, 4000);
+		// return () => {
+		// 	clearInterval(updateInterval);
+		// };
+	}, []);
+
+	const getOrders = () => {
 		const token = localStorage.getItem('accessToken');
 		const payload = {};
 
@@ -34,7 +47,7 @@ function OrderList(props) {
 			.catch((error) => {
 				console.log(error);
 			});
-	}, []);
+	}
 
 	const processOrder = (orderId, orderStatus) => {
 		const token = localStorage.getItem('accessToken');
@@ -69,10 +82,6 @@ function OrderList(props) {
 			});
 	};
 
-	const setSearchTermNewFunc = (event) => {
-		setSearchTerm(event.target.value);
-	}
-
 	const handleOrderStatusSelectionChange = (event, orderId) => {
 		setProducts((prev) => {
 			const updatedItems = prev.map((item) =>
@@ -80,6 +89,27 @@ function OrderList(props) {
 			);
 			return updatedItems;
 		});
+	}
+
+	const setSearchTermNewFunc = (event) => {
+		setSearchTerm(event.target.value);
+		var filteredProducts = [];
+		if (!checkboxSearch) {
+			filteredProducts = products.filter((product) => product.status.toLowerCase().includes(searchTerm.toLowerCase()));
+		} else {
+			const user = localStorage.getItem("name");
+			filteredProducts = products.filter((product) =>
+				product.status.toLowerCase().includes(searchTerm.toLowerCase()) && !product.userName.toLowerCase().includes(user.toLowerCase())
+			);
+		}
+		setSearchedProducts(filteredProducts);
+	}
+
+	const handleCheckboxSearch = () => {
+		setCheckboxSearch(!checkboxSearch);
+		const user = localStorage.getItem("name");
+		const filteredProducts = products.filter((product) => !product.userName.toLowerCase().includes(user.toLowerCase()));
+		setSearchedProducts(filteredProducts);
 	}
 
 	return (
@@ -90,7 +120,13 @@ function OrderList(props) {
 				value={searchTerm}
 				onChange={setSearchTermNewFunc}
 			/>
-			{products.map((order) => (
+			<label>
+				<input type="checkbox" checked={checkboxSearch} onChange={handleCheckboxSearch}></input>
+				Orders for Your warehouse
+			</label>
+			{(
+				searchTerm === "" && checkboxSearch === false ? products : searchedProducts
+			).map((order) => (
 				<div key={order.orderId} className="order-list-box">
 					<div><b>ID: </b>{order.orderId}</div>
 					{/* <div><b>Status: </b>{order.status}</div> */}
@@ -98,7 +134,7 @@ function OrderList(props) {
 						onChange={(e) => handleOrderStatusSelectionChange(e, order.orderId)}
 						defaultValue={order.status}
 						disabled={order.status === "CANCELED"}
-						>
+					>
 						{ORDER_STATUS.map((status) => (
 							<option key={status} value={status}>
 								{status}
@@ -108,13 +144,24 @@ function OrderList(props) {
 					<div><b>Ordered By: </b>{order.userName}</div>
 					<div><b>From Storehouse ID: </b>{order.formStorehouseId}</div>
 					<div><b>To Storehouse ID: </b>{order.toStorehouseId}</div>
+					<div className="order-details">
+						<h3>Order Details :</h3>
+						{order.items.map(item => (
+							<div className="product-detail" key={item.productDto.id}>
+								<b>Product Name: </b>{item.productDto.name}<br />
+								<b>Description: </b>{item.productDto.description}<br />
+								<b>Manufacturer: </b>{item.productDto.manufacturer}<br />
+								<b>Quantity: </b>{item.quantity}
+							</div>
+						))}
+					</div>
 					{order.status !== "CANCELED" ?
 						<button type="button" onClick={() => processOrder(order.orderId, order.tempStatus)} disabled={order.status === order.tempStatus}>Update</button>
 						: null
 					}
 				</div>
 			))}
-			 <ToastContainer /> 
+			<ToastContainer />
 		</div>
 	);
 }

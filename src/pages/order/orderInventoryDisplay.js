@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, forwardRef, useImperativeHandle } from "react";
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import axios from "axios";
 import './inventory.css';
 
@@ -6,7 +6,6 @@ const OrderInventoryDisplay = forwardRef((props, ref) => {
 
   const [inventory, setInventory] = useState([]);
   const [orderAmount, setOrderAmount] = useState(0);
-  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
 
@@ -72,17 +71,12 @@ const OrderInventoryDisplay = forwardRef((props, ref) => {
     }
   }));
 
-  // const forceUpdateInv = () => {
-  //   console.log('forceUpdateInv inside inventoryDisplay')
-  //   forceUpdate();
-  // }
-
   if (inventory.length === 0) {
     return <p>No products found in inventory.</p>;
   }
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", width: "800px" }} ref={ref}>
+    <div style={{ display: "flex", flexWrap: "wrap", width: "800px", height: "800px", overflow: "scroll" }} ref={ref}>
       {inventory.length !== 0 && inventory.map((item) => (
         <div className="inventory-card" key={item.product.id}>
           <h3 style={{ marginBottom: "10px" }}>{item.product.id + " Name: " + item.product.name}</h3>
