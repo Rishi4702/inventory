@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import ProductChart from './ProductChart'; // Adjust this path to the actual location of your ProductChart.js file
+import OrderTimeChart from './OrderTimeChart'; // Adjust this path to the actual location of your OrderTimeChart.js file
 
 function Dash() {
-
-	useEffect(() => {
-
-	}, []);
-
-	return (
-		<div style={{ display: 'flex', flexDirection: 'row', marginTop: '80px', width: '100%' }}>
-			Hi rishav
-		</div>
-	);
-
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' ,padding:"90px"}}>
+      <div style={{ height: '1000px', width: '800px' }}>
+        <ProductChart />
+      </div>
+      <div style={{ height: '1000px', width: '800px' }}>
+        <OrderTimeChart />
+      </div>
+    </div>
+  );
 }
 
 export default Dash;

@@ -22,3 +22,9 @@
 .inventory-card button:hover {
 	background-color: #0062cc;
 }
+
+.orderImage > img {
+	width: fit-content;
+	height: 200px;
+	border-radius: 10%;
+}

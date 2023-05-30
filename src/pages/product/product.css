@@ -1,9 +1,16 @@
+.product_outer {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  width: 100%;
+}
 .product-list-container {
   display: flex;
   flex-wrap: wrap;
   margin-top: 60px;
-  height: fit-content;
-  width: fit-content;
+  height: 1000px;
+  width: 800px;
+  overflow: scroll;
 }
 
 .product-card {
@@ -76,4 +83,64 @@
 
 .product-card:hover .product-details p {
   display: block;
+}
+.product-image {
+  width: 200px; /* Adjust the width as per your requirement */
+  height: 200px; /* Adjust the height as per your requirement */
+  border-radius: 8px;
+}
+
+.product_form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  margin: 60px;
+  height: fit-content;
+  border: 1px solid #ccc;
+  background-color: #d5e5f5;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product_form h1 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.product_form label {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #777;
+  padding-right: 1em;
+}
+
+.product_form > * > * {
+  width: 100%;
+}
+
+.product_form input,
+.product_form select {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  font-size: 1rem;
+}
+
+.product_form input[type="submit"] {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.product_form input[type="submit"]:hover {
+  background-color: #ff0505;
 }

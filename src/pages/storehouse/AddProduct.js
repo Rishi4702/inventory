@@ -8,17 +8,6 @@ function AddProduct(props) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [formQuantity, setFormQuantity] = useState(0);
 
-	useEffect(() => {
-		axios
-			.get("http://10.8.0.6:8080/product/all")
-			.then((response) => {
-				setProducts(response.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
-
 	//   const filteredProducts = products.filter((product) =>
 	//   typeof searchTerm === 'string' && product.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -40,6 +29,17 @@ function AddProduct(props) {
 		});
 	}
 
+	const searchForProduct = () => {
+		axios.get(`http://10.8.0.6:8080/product/name/${searchTerm}`)
+			.then((response) => {
+				console.log(response);
+				setProducts(response.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
 	const onAddProdQuantityChange = (event) => {
 		setFormQuantity(event.target.value);
 	}
@@ -47,6 +47,8 @@ function AddProduct(props) {
 	const setSearchTermNewFunc = (event) => {
 		setSearchTerm(event.target.value);
 	}
+
+	console.log(filteredProducts)
 
 	return (
 		<div className="outerdiv">
@@ -56,6 +58,7 @@ function AddProduct(props) {
 				value={searchTerm}
 				onChange={setSearchTermNewFunc}
 			/>
+			<button type="button" onClick={searchForProduct}>Search</button>
 			{filteredProducts.map((product) => (
 				<div key={product.id} className="add-product-box">
 					<div><b>ID </b>{product.id}</div>

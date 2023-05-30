@@ -92,7 +92,7 @@ class Navbar extends Component {
               <li><FaChartLine style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('dash')}>Dashboard</div></li>
               <li><FaBoxOpen style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('stock')}>In Stock</div></li>
               <li><FaShoppingCart style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('products')}>Products</div></li>
-              <li><FaListAlt style={{ color: 'blue' }} /><div className="div-link">Sales</div></li>
+              {/* <li><FaListAlt style={{ color: 'blue' }} /><div className="div-link">Sales</div></li> */}
               <li><BsFillCartPlusFill style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('orders')}>Orders</div></li>
               {localStorage.getItem('roles') === 'ROLE_ADMIN' &&
                 <li><HiOutlineUserGroup style={{ color: 'blue' }} /><div className="div-link" onClick={() => this.togglePage('users')}>Users</div></li>

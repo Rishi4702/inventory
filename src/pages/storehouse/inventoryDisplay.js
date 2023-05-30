@@ -43,10 +43,12 @@ const InventoryDisplay = forwardRef((props, ref) => {
   }
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", width: "800px" }} ref={ref}>
+    <div style={{ display: "flex", flexWrap: "wrap", width: "800px",height:"1000px",overflow:"Scroll" }} ref={ref}>
       {inventory.length !== 0 && inventory.map((item) => (
         <div className="inventory-card" key={item.product.id}>
-          <h3 style={{ marginBottom: "10px" }}>{item.product.id + " Name: " + item.product.name}</h3>
+           <img src={item.product.url} alt={item.product.name} className="product-image" />
+          <h3 style={{ marginBottom: "10px" }}>{"Product Id: "+item.product.id }</h3>
+          <h3>{" Name: " + item.product.name}</h3>
           <p style={{ height: "50px", overflow: "hidden", transition: "height 0.5s" }}>{item.product.description}</p>
           <p>Price: {item.product.price} USD</p>
           <p>Quantity: {item.quantity}</p>

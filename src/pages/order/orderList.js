@@ -55,6 +55,7 @@ function OrderList() {
 			orderId: orderId,
 			orderStatus: orderStatus
 		};
+		console.log("it was called processOrder")
 
 		axios.post('http://10.8.0.6:8080/order/process', payload, {
 			headers: {

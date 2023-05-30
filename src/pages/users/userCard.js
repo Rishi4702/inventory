@@ -10,7 +10,8 @@ const UserCard = ({ user }) => {
   const [showCompanyForm, setShowCompanyForm] = useState(false);
   const [companyOptions, setCompanyOptions] = useState([]);
 
-  const [selectedStorehouse, setSelectedStorehouse] = useState(company.storehouses ? company.storehouses.id : '');
+  //const [selectedStorehouse, setSelectedStorehouse] = useState(company.storehouses ? company.storehouses.id : '');
+  const [selectedStorehouse, setSelectedStorehouse] = useState('');
   const [showStorehouseForm, setShowStorehouseForm] = useState(false);
   const [storehouseOptions, setStorehouseOptions] = useState([]);
 
@@ -28,7 +29,7 @@ const UserCard = ({ user }) => {
       }
     })
       .then(response => {
-        console.log(response);
+
         var tempArr = [];
         tempArr.push(response.data.company);
         setCompanyOptions(tempArr);
@@ -104,12 +105,18 @@ const UserCard = ({ user }) => {
   };
 
   const handleStorehouseSubmit = (event) => {
+    const token = localStorage.getItem('accessToken');
     event.preventDefault();
     axios.post('http://10.8.0.6:8080/storehouse/user', {
-      userId: id,
+      userEmail: email,
       storehouseId: selectedStorehouse
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
       .then(response => {
+        console.log(response);
         console.log('Storehouse assigned successfully');
         // Implement any necessary state updates or other actions
       })
@@ -138,13 +145,13 @@ const UserCard = ({ user }) => {
           </div>
         </div>
         <h2>{email}</h2>
-        <h3>Current company: {company == null ? 'Not assigned' : company.name}</h3>
+        <h3>Current company: {company === null ? 'Not assigned' : company.name}</h3>
         <div className="storehouses-container">
           <h3>Current Storehouses:</h3>
           <ul className="storehouses-list">
-            {company.storehouses == null ? 'Not assigned' : company.storehouses.map(storehouse => (
+            {company ? company.storehouses.map(storehouse => (
               <li key={storehouse.id}><h3>{storehouse.name}</h3></li>
-            ))}
+            )) : 'Not assigned'}
           </ul>
         </div>
         <button className="btn btn-primary" onClick={handleManageStorehouses}>Manage Storehouses</button>
