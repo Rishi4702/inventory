@@ -23,7 +23,7 @@ const UserCard = ({ user }) => {
     const token = localStorage.getItem('accessToken');
 
     // Make the API request with the updated endpoint and the JWT token
-    axios.get(`http://10.8.0.6:8080/users/${id}`, {
+    axios.get(`http://192.168.43.148:8080/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -41,7 +41,7 @@ const UserCard = ({ user }) => {
   }, []);
 
   // useEffect(() => {
-  //   axios.get('http://10.8.0.6:8080/storehouse/all')
+  //   axios.get('http://192.168.43.148:8080/storehouse/all')
   //     .then(response => {
   //       setStorehouseOptions(response.data);
   //     })
@@ -51,7 +51,7 @@ const UserCard = ({ user }) => {
   // }, []);
 
   // const updateStorehouseDisplay = () => {
-  //   axios.get('http://10.8.0.6:8080/storehouse/all')
+  //   axios.get('http://192.168.43.148:8080/storehouse/all')
   //     .then(response => {
   //       setStorehouseOptions(response.data);
   //     })
@@ -83,7 +83,7 @@ const UserCard = ({ user }) => {
     event.preventDefault();
     const token = localStorage.getItem('accessToken');
 
-    axios.post('http://10.8.0.6:8080/company/employee', {
+    axios.post('http://192.168.43.148:8080/company/employee', {
       userId: id,
       companyId: selectedCompany
     }, {
@@ -107,7 +107,7 @@ const UserCard = ({ user }) => {
   const handleStorehouseSubmit = (event) => {
     const token = localStorage.getItem('accessToken');
     event.preventDefault();
-    axios.post('http://10.8.0.6:8080/storehouse/user', {
+    axios.post('http://192.168.43.148:8080/storehouse/user', {
       userEmail: email,
       storehouseId: selectedStorehouse
     }, {

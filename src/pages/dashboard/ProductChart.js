@@ -13,7 +13,7 @@ function ProductChart() {
           headers: { Authorization: `Bearer ${token}` }
         };
 
-        const response = await axios.get('http://localhost:8080/order/raport/user', config);
+        const response = await axios.get('http://192.168.43.148:8080/order/raport/user', config);
         const orders = response.data;
         let frequency = {};
 

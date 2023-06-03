@@ -30,7 +30,7 @@ function WarehouseSelection() {
     console.log('fetch')
 
     // Make request to API with bearer token and user ID
-    fetch(`http://10.8.0.6:8080/users/${userId}`, {
+    fetch(`http://192.168.43.148:8080/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

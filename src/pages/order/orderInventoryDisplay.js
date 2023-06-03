@@ -16,7 +16,7 @@ const OrderInventoryDisplay = forwardRef((props, ref) => {
   }, [props.selectedWarehouse]);
 
   const updateInventory = () => {
-    fetch(`http://10.8.0.6:8080/storehouse/inv/${props.selectedWarehouse}`)
+    fetch(`http://192.168.43.148:8080/storehouse/inv/${props.selectedWarehouse}`)
       .then((response) => response.json())
       .then((data) => {
         setInventory(data);
@@ -29,7 +29,7 @@ const OrderInventoryDisplay = forwardRef((props, ref) => {
   const submitOrder = async (productId) => {
     // Get managinig storehouse id
     const token = localStorage.getItem('accessToken');
-    const storeHouseData = await axios.get('http://10.8.0.6:8080/users/storehouses', {
+    const storeHouseData = await axios.get('http://192.168.43.148:8080/users/storehouses', {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -51,7 +51,7 @@ const OrderInventoryDisplay = forwardRef((props, ref) => {
 
     console.log(payload)
 
-    axios.post('http://10.8.0.6:8080/order', payload, {
+    axios.post('http://192.168.43.148:8080/order', payload, {
       headers: {
         Authorization: `Bearer ${token}`
       }

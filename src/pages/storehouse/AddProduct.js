@@ -15,22 +15,22 @@ function AddProduct(props) {
 
 	const addProductToWarehouse = (product) => {
 		console.log(`Adding product ID[${product.id}] to warehouse ID[${props.selectedWarehouse}] with quantity [${formQuantity}]`);
-		axios.post("http://10.8.0.6:8080/storehouse/product/add",{
+		axios.post("http://192.168.43.148:8080/storehouse/product/add", {
 			storehouseId: props.selectedWarehouse,
 			productId: product.id,
 			quantity: formQuantity
 		})
-		.then((response) => {
-		  console.log(response.data);
-			props.notifyParent();
-		})
-		.catch((error) => {
-		  console.log(error);
-		});
+			.then((response) => {
+				console.log(response.data);
+				props.notifyParent();
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}
 
 	const searchForProduct = () => {
-		axios.get(`http://10.8.0.6:8080/product/name/${searchTerm}`)
+		axios.get(`http://192.168.43.148:8080/product/name/${searchTerm}`)
 			.then((response) => {
 				console.log(response);
 				setProducts(response.data);
@@ -52,13 +52,22 @@ function AddProduct(props) {
 
 	return (
 		<div className="outerdiv">
-			<input
-				type="text"
-				placeholder="Search products..."
-				value={searchTerm}
-				onChange={setSearchTermNewFunc}
-			/>
-			<button type="button" onClick={searchForProduct}>Search</button>
+			<div className="innerDiv">
+			<div className="search-input">
+				<input
+					type="text"
+					placeholder="Search products..."
+					value={searchTerm}
+					onChange={setSearchTermNewFunc}
+				/>
+			</div>
+			<div className="search-button">
+				<button type="button" onClick={searchForProduct}>
+					Search
+				</button>
+			</div>
+			</div>
+			
 			{filteredProducts.map((product) => (
 				<div key={product.id} className="add-product-box">
 					<div><b>ID </b>{product.id}</div>

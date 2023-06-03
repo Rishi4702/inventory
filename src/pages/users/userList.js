@@ -8,7 +8,7 @@ const UserList = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    axios.get('http://10.8.0.6:8080/users/all', {
+    axios.get('http://192.168.43.148:8080/users/all', {
       headers: {
         Authorization: `Bearer ${token}`,
       },

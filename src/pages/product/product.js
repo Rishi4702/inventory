@@ -7,7 +7,7 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get('http://10.8.0.6:8080/product/all')
+    axios.get('http://192.168.43.148:8080/product/all')
       .then(response => {
         setProducts(response.data);
       })
@@ -32,7 +32,7 @@ const ProductList = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    fetch('http://localhost:8080/product/add', {
+    fetch('http://192.168.43.148:8080/product/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

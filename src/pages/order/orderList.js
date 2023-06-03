@@ -15,39 +15,49 @@ function OrderList() {
 
 	useEffect(() => {
 		getOrders();
-		// const updateInterval = setInterval(() => {
-		// 	console.log('Updated orders');
-		// 	getOrders();
-		// }, 4000);
-		// return () => {
-		// 	clearInterval(updateInterval);
-		// };
-	}, []);
+	  
+		const refreshInterval = setInterval(() => {
+		  getOrders();
+		}, 30000); // Refresh every 30 seconds
+	  
+		return () => {
+		  clearInterval(refreshInterval);
+		};
+	  }, []);
 
 	const getOrders = () => {
 		const token = localStorage.getItem('accessToken');
 		const payload = {};
-
-		fetch('http://10.8.0.6:8080/order/user', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token}`
-			},
-			body: JSON.stringify(payload)
+	  
+		fetch('http://192.168.43.148:8080/order/user', {
+		  method: 'POST',
+		  headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`
+		  },
+		  body: JSON.stringify(payload)
 		})
-			.then((response) => response.json())
-			.then((data) => {
-				var mergedOrders = data.orderedFromYourStorehouses.concat(data.orderedToYourStorehouses);
-				mergedOrders = mergedOrders.map((obj) => ({ ...obj, tempStatus: obj.status }));
-				mergedOrders.sort((a, b) => a.orderId - b.orderId);
-				setProducts(mergedOrders);
-				console.log(mergedOrders);
-			})
-			.catch((error) => {
-				console.log(error);
+		  .then((response) => response.json())
+		  .then((data) => {
+			var mergedOrders = data.orderedFromYourStorehouses.concat(data.orderedToYourStorehouses);
+			mergedOrders = mergedOrders.map((obj) => ({ ...obj, tempStatus: obj.status }));
+	  
+			// Sort the orders by ID in decreasing order
+			mergedOrders.sort((a, b) => b.orderId - a.orderId);
+	  
+			mergedOrders.forEach((order) => {
+			  // Sort the items in each order by ID in decreasing order
+			  order.items.sort((a, b) => b.productDto.id - a.productDto.id);
 			});
-	}
+	  
+			setProducts(mergedOrders);
+			console.log(mergedOrders);
+		  })
+		  .catch((error) => {
+			console.log(error);
+		  });
+	  };
+	  
 
 	const processOrder = (orderId, orderStatus) => {
 		const token = localStorage.getItem('accessToken');
@@ -57,7 +67,7 @@ function OrderList() {
 		};
 		console.log("it was called processOrder")
 
-		axios.post('http://10.8.0.6:8080/order/process', payload, {
+		axios.post('http://192.168.43.148:8080/order/process', payload, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Bearer ${token}`
@@ -115,6 +125,7 @@ function OrderList() {
 
 	return (
 		<div className="outerdiv">
+			 <div className="search-container">
 			<input
 				type="text"
 				placeholder="Search orders..."
@@ -123,8 +134,9 @@ function OrderList() {
 			/>
 			<label>
 				<input type="checkbox" checked={checkboxSearch} onChange={handleCheckboxSearch}></input>
-				Orders for Your warehouse
-			</label>
+				Orders for your warehouse
+			</label>		
+			</div>
 			{(
 				searchTerm === "" && checkboxSearch === false ? products : searchedProducts
 			).map((order) => (
@@ -157,7 +169,7 @@ function OrderList() {
 						))}
 					</div>
 					{order.status !== "CANCELED" ?
-						<button type="button" onClick={() => processOrder(order.orderId, order.tempStatus)} disabled={order.status === order.tempStatus}>Update</button>
+						<button type="button" onClick={() => processOrder(order.orderId, order.tempStatus)}>Update</button>
 						: null
 					}
 				</div>

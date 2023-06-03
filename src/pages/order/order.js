@@ -21,7 +21,7 @@ function Order() {
 	const updateWarehouse = async () => {
 		// Get managinig storehouse
 		const token = localStorage.getItem('accessToken');
-		const storeHouseData = await axios.get('http://10.8.0.6:8080/users/storehouses', {
+		const storeHouseData = await axios.get('http://192.168.43.148:8080/users/storehouses', {
 			headers: {
 				Authorization: `Bearer ${token}`
 			}
@@ -30,7 +30,7 @@ function Order() {
 		});
 
 		// Make request to API with bearer token and user ID
-		axios.get('http://10.8.0.6:8080/storehouse/all')
+		axios.get('http://192.168.43.148:8080/storehouse/all')
 			.then((response) => {
 				const managingStorehouseId = storeHouseData.data[0].id;
 				const filteredHouses = response.data.filter((house) => house.id !== managingStorehouseId);

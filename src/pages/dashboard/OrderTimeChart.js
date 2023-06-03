@@ -7,20 +7,20 @@ function OrderTimeChart() {
   const [labels, setLabels] = useState([]);
   const [data, setData] = useState([]);
 
-  const api = "http://localhost:8080/order/raport/user";
+  const api = "http://192.168.43.148:8080/order/raport/user";
   const accessToken = localStorage.getItem("accessToken");
 
   const fetchOrderData = async () => {
     try {
-      const { data: orders } = await axios.get(api, { headers: { Authorization: `Bearer ${accessToken}` }});
+      const { data: orders } = await axios.get(api, { headers: { Authorization: `Bearer ${accessToken}` } });
       const timeCount = {};
-     console.log(orders);
+      console.log(orders);
       orders.forEach((order) => {
         if (!order.createdAt) {
           return;
         }
 
-        const orderTime = format(new Date(order.createdAt), "H");
+        const orderTime = format(new Date(order.createdAt), "HH:mm");
         if (timeCount[orderTime]) {
           timeCount[orderTime]++;
         } else {
@@ -46,11 +46,11 @@ function OrderTimeChart() {
     labels: labels,
     datasets: [
       {
-        label: "Frequency",
+        label: "Frequency of Orders Each Hour",
         data: data,
         borderColor: "#007bff",
         borderWidth: 2,
-        fill: false,
+        fill: false
       },
     ],
   };
@@ -65,29 +65,32 @@ function OrderTimeChart() {
         title: {
           display: true,
           text: "Hour",
-        },
+          color: "#FF0000", // Red color
+        }
       },
       y: {
         title: {
           display: true,
-          text: "Frequency",
+          text: "Frequency"
         },
         beginAtZero: true,
         ticks: {
           stepSize: 1,
           precision: 0,
         },
-      },
+      }
     },
     plugins: {
       legend: {
-        display: false,
-      },
+        display: true,
+        position: "right"
+      }
     },
     responsive: true,
     maintainAspectRatio: false,
   };
-  
+
+
   return <Line data={lineData} options={options} />;
 }
 

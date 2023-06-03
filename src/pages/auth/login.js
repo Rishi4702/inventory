@@ -26,7 +26,7 @@ class Login extends React.Component {
   authorize(e) {
     e.preventDefault();
     axios
-      .post("http://10.8.0.6:8080/auth/login", {
+      .post("http://192.168.43.148:8080/auth/login", {
         email: this.state.email,
         password: this.state.password,
       })

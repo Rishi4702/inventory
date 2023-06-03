@@ -11,7 +11,7 @@ const InventoryDisplay = forwardRef((props, ref) => {
       return;
     }
 
-    fetch(`http://10.8.0.6:8080/storehouse/inv/${props.selectedWarehouse}`)
+    fetch(`http://192.168.43.148:8080/storehouse/inv/${props.selectedWarehouse}`)
       .then((response) => response.json())
       .then((data) => {
         setInventory(data);
@@ -22,7 +22,7 @@ const InventoryDisplay = forwardRef((props, ref) => {
   }, [props.selectedWarehouse]);
 
   const updateInventory = () => {
-    fetch(`http://10.8.0.6:8080/storehouse/inv/${props.selectedWarehouse}`)
+    fetch(`http://192.168.43.148:8080/storehouse/inv/${props.selectedWarehouse}`)
       .then((response) => response.json())
       .then((data) => {
         setInventory(data);
